@@ -1,0 +1,111 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class Employee {
+public:
+    string id;
+    string name;
+
+    Employee(string empId, string empName) : id(empId), name(empName) {}
+};
+
+class EmployeeManager {
+private:
+    vector<Employee> employees;
+
+public:
+    void enterEmployeeId() {
+        string empId;
+        cout << "Enter Employee ID: ";
+        cin >> empId;
+
+        auto it = find_if(employees.begin(), employees.end(), [empId](const Employee& emp) {
+            return emp.id == empId;
+        });
+
+        if (it != employees.end()) {
+            cout << "Employee ID already exists!" << endl;
+        } else {
+            cout << "Employee ID is available." << endl;
+        }
+    }
+
+    void createEmployee() {
+        string empId, empName;
+        cout << "Enter Employee ID: ";
+        cin >> empId;
+
+        auto it = find_if(employees.begin(), employees.end(), [empId](const Employee& emp) {
+            return emp.id == empId;
+        });
+
+        if (it != employees.end()) {
+            cout << "Employee with this ID already exists!" << endl;
+            return;
+        }
+
+        cout << "Enter Employee Name: ";
+        cin.ignore(); // Clear newline character from the buffer
+        getline(cin, empName);
+
+        Employee newEmployee(empId, empName);
+        employees.push_back(newEmployee);
+
+        cout << "Employee created successfully!" << endl;
+    }
+
+    void removeEmployee() {
+        string empId;
+        cout << "Enter Employee ID to remove: ";
+        cin >> empId;
+
+        auto it = find_if(employees.begin(), employees.end(), [empId](const Employee& emp) {
+            return emp.id == empId;
+        });
+
+        if (it != employees.end()) {
+            employees.erase(it);
+            cout << "Employee removed successfully!" << endl;
+        } else {
+            cout << "Employee with this ID does not exist!" << endl;
+        }
+    }
+};
+
+int main() {
+    EmployeeManager employeeManager;
+
+    while (true) {
+        cout << "\nEmployee Management System\n";
+        cout << "1. Enter Employee ID\n";
+        cout << "2. Create Employee\n";
+        cout << "3. Remove Employee\n";
+        cout << "0. Exit\n";
+        cout << "Enter your choice: ";
+
+        int choice;
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                employeeManager.enterEmployeeId();
+                break;
+            case 2:
+                employeeManager.createEmployee();
+                break;
+            case 3:
+                employeeManager.removeEmployee();
+                break;
+            case 0:
+                cout << "Exiting the program. Goodbye!\n";
+                return 0;
+            default:
+                cout << "Invalid choice. Please enter a valid option.\n";
+        }
+    }
+
+    return 0;
+}
